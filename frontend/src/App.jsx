@@ -15,7 +15,8 @@ class UnconnectedApp extends Component {
     this.state = {
       date: null,
       focused: null,
-      datesTaken: {test: 'hello'}
+      datesTaken: {},
+      city: ''
     }
   }
 
@@ -33,6 +34,8 @@ componentDidMount = () => {
   })
 }
 
+
+//Blocked dates
 isDayBlocked(date) {
 if (this.state.datesTaken[date] === true) {
   
@@ -40,11 +43,20 @@ if (this.state.datesTaken[date] === true) {
 }
 }
 
+//city selection
+handleLocationChange = evt => {
+  evt.preventDefault();
+  let city = evt.target.value 
+
+  this.setState({city: city})
+}
+
 
 //send data to backend
   handleReserve = () => {
     let data = new FormData();
-    data.append('date', this.state.date)    
+    data.append('date', this.state.date) 
+    data.append('city', this.state.city)   
 
     fetch('http://localhost:4000/post-dates',
     {
@@ -54,14 +66,16 @@ if (this.state.datesTaken[date] === true) {
     })
     .then(x => {return x.text()})
     .then(responseBody => { 
+      console.log(responseBody)
       let body = JSON.parse(responseBody)
      if (body.success) {
        alert('date added to backend')
-      
+      console.log(body.testing)
       }
     })
       let timeNow = this.state.date._d
-      console.log('reserved, ' , moment(timeNow).format('Do MMM YYYY'))
+      let city = this.state.city
+      console.log('reserved, ' , moment(timeNow).format('Do MMM YYYY'), 'city ', city)
       
        }
 
@@ -69,6 +83,8 @@ if (this.state.datesTaken[date] === true) {
   render = () => {
      return (
     <div >
+
+      {/*v--calendar--v*/}
     <SingleDatePicker
      date={this.state.date} 
      onDateChange={date => this.setState({ date })} 
@@ -76,11 +92,22 @@ if (this.state.datesTaken[date] === true) {
      onFocusChange={({ focused }) => this.setState({ focused })} 
      isDayBlocked={this.isDayBlocked}
      id="your_unique_id" />
-  
+ 
+    {/* v--City Selection --v   */}
+    <div>
+      Choose your city: {' '}
+      <select name='Choose-your-city' onChange={this.handleLocationChange}>
+        <option value='Montreal'>Montreal</option>
+        <option value='Toronto'>Toronto</option>
+        <option value='Vancouver'>Vancouver</option>
+      </select>
+    </div>
+ 
+ 
     <div>
     <button onClick={this.handleReserve}>Reserve</button>
     </div>
-    
+ 
     </div>);
     }
 }
