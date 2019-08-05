@@ -9,5 +9,5 @@ ReactDates test
 Things to work on<br />
 -Auto-reload calendar once reservations are made<br />
 -Implement location using maps<br />
--Implement Axios
+-Implement Axios<br />
 -CSS to make it look pretty
