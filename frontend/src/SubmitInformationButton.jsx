@@ -35,6 +35,13 @@ class UnconnectedSubmitInformationButton extends Component {
               body.buffer +
               " day buffer before and after"
           );
+        } else {
+          alert(
+            `A reservation not possible for this day
+             \n Please allow for a 1 day buffer before and after your selected date if you're in Montreal
+             \n A 2 day buffer if you're in Toronto 
+             \n Or a 3 day buffer if you're in Vancouver`
+          );
         }
       });
   };
