@@ -27,8 +27,6 @@ app.post("/post-dates", upload.none(), (req, res) => {
   if (city === "") {
     city = "Montreal";
   }
-  //reserves date selected
-  itemData.datesReserved[date] = true;
 
   //buffer initialization
   let buffer = 0;
@@ -36,31 +34,58 @@ app.post("/post-dates", upload.none(), (req, res) => {
   //adds buffers to date selected
   if (city === "Montreal") {
     buffer = 1;
+    //check to see if dates are available
+    for (let i = 1; i < 2; i++) {
+      if (itemData.datesReserved[moment(date).subtract(i, "d")] === true)
+        return res.send({ success: false });
+      if (itemData.datesReserved[moment(date).add(i, "d")] === true)
+        return res.send({ success: false });
+    }
+    //if available run this
     for (let i = 1; i < 2; i++) {
       itemData.datesReserved[moment(date).subtract(i, "d")] = true;
       itemData.datesReserved[moment(date).add(i, "d")] = true;
     }
+    itemData.datesReserved[date] = true;
   }
   if (city === "Toronto") {
     buffer = 2;
+    //check to see if dates are available
+    for (let i = 1; i < 3; i++) {
+      if (itemData.datesReserved[moment(date).subtract(i, "d")] === true)
+        return res.send({ success: false });
+      if (itemData.datesReserved[moment(date).add(i, "d")] === true)
+        return res.send({ success: false });
+    }
+    //if available run this
     for (let i = 1; i < 3; i++) {
       itemData.datesReserved[moment(date).subtract(i, "d")] = true;
       itemData.datesReserved[moment(date).add(i, "d")] = true;
     }
+    itemData.datesReserved[date] = true;
   }
   if (city === "Vancouver") {
     buffer = 3;
+    //check to see if dates are available
+    for (let i = 1; i < 4; i++) {
+      if (itemData.datesReserved[moment(date).subtract(i, "d")] === true)
+        return res.send({ success: false });
+      if (itemData.datesReserved[moment(date).add(i, "d")] === true)
+        return res.send({ success: false });
+    }
+    //if available run this
     for (let i = 1; i < 4; i++) {
       itemData.datesReserved[moment(date).subtract(i, "d")] = true;
       itemData.datesReserved[moment(date).add(i, "d")] = true;
     }
+    itemData.datesReserved[date] = true;
   }
 
-  let testing = itemData.datesReserved;
+  let datesReserved = itemData.datesReserved;
 
   res.send({
     success: true,
-    testing,
+    datesReserved,
     date: moment(date).format("MMM Do YYYY"),
     buffer: buffer
   });
