@@ -10,3 +10,4 @@ Things to work on<br />
 -Auto-reload calendar once reservations are made<br />
 -Implement location using maps<br />
 -Implement Axios
+-CSS to make it look pretty
