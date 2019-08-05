@@ -14,7 +14,7 @@ let moment = require("moment");
 
 let itemData = { itemData: "", state: "", price: "", datesReserved: {} };
 
-app.get("/get-dates", upload.none(), (req, res) => {
+app.get("/get-dates", (req, res) => {
   let datesTaken = itemData.datesReserved;
   res.send({ success: true, datesTaken: datesTaken });
 });
