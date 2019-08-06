@@ -6,16 +6,46 @@ class UnconnectedSubmitInformationButton extends Component {
     super(props);
 
     this.state = {
-      date: null,
+      startDate: null,
+      endDate: null,
       city: ""
     };
   }
 
   //send data to backend
   handleReserve = () => {
+   
+    //check to see if date is selected
+    if (this.props.startDate === null || this.props.endDate === null) {
+      return alert("Select a date");
+    }
+   
+    //check to see if postal code is valid
+    let postalCode = this.props.city.split("");
+    if (postalCode.length > 6) {
+      return alert("This is not a valid postal code, try again");
+    }
+   
+    //turn postal code into a city
+    let city = "";
+    if (postalCode[0].toUpperCase() === "H") city = "Montreal";
+    if (postalCode[0].toUpperCase() === "M") city = "Toronto";
+    if (postalCode[0].toUpperCase() === "V") city = "Vancouver";
+    
+    //check to see if city changed
+    if (city === "")
+      return alert(`
+    Your city was not found, make sure: \n
+    If you're in Montreal, your postal code begins with H \n
+    If you're in Toronto, your postal code begins with M \n
+    If you're in Vancouver, your postal code begins with V.
+    `);
+    
+    //create form to send
     let data = new FormData();
-    data.append("date", this.props.date);
-    data.append("city", this.props.city);
+    data.append("startDate", this.props.startDate);
+    data.append("endDate", this.props.endDate);
+    data.append("city", city);
 
     fetch("http://localhost:4000/post-dates", {
       method: "POST",
@@ -29,11 +59,14 @@ class UnconnectedSubmitInformationButton extends Component {
         let body = JSON.parse(responseBody);
         if (body.success) {
           alert(
-            "Reserved for " +
-              body.date +
+            "Reserved from " +
+              body.startDate +
+              " until " +
+              body.endDate +
               " with a " +
               body.buffer +
-              " day buffer before and after"
+              " day buffer before and after \nLocation: " +
+              body.city
           );
         } else {
           alert(
@@ -57,7 +90,8 @@ class UnconnectedSubmitInformationButton extends Component {
 
 let mapStateToProps = st => {
   return {
-    date: st.date,
+    startDate: st.startDate,
+    endDate: st.endDate,
     city: st.city
   };
 };

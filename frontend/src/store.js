@@ -18,7 +18,8 @@ let reducer = (state, action) => {
   if (action.type === "date-updated") {
     return {
       ...state,
-      date: action.body
+      startDate: action.startDate,
+      endDate: action.endDate
     };
   }
   return state;
@@ -27,7 +28,8 @@ const store = createStore(
   reducer,
   {
     datesTaken: {},
-    date: null,
+    startDate: null,
+    endDate: null,
     city: ""
   },
   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
