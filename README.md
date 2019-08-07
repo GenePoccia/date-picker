@@ -9,4 +9,5 @@ ReactDates test
 Things to work on<br />
 -Implement location using maps<br />
 -Implement Axios<br />
--CSS to make it look pretty
+-CSS to make it look pretty <br />
+-Refactor the back-end into multiple files
